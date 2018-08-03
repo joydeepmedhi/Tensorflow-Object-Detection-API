@@ -7,8 +7,6 @@ LABEL_MAP="/home/yoda/Desktop/Joydeep/models/research/cards-detection/data/label
 NUM_OUTPUT_CLASSES=6
 
 
-
-
 python src/inference.py --input_dir=${INPUT_DIR} \
                         --output_dir=${OUTPUT_DIR} \
                         --frozen_graph=${FROZEN_GRAPH} \

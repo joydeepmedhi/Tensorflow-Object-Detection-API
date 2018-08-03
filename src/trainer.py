@@ -221,7 +221,6 @@ def train(create_tensor_dict_fn,
           save_summaries_secs, #added
           graph_hook_fn=None):
   """Training function for detection models.
-
   Args:
     create_tensor_dict_fn: a function to create a tensor input dictionary.
     create_model_fn: a function that creates a DetectionModel and generates

@@ -198,6 +198,5 @@ def main(_):
       save_interval_secs,
       graph_hook_fn=graph_rewriter_fn)
 
-
 if __name__ == '__main__':
   tf.app.run()

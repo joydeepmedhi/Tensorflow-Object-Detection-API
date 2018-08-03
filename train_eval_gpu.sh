@@ -20,7 +20,6 @@ echo "Training Job..."
 
 nvidia-smi
 
-
 ####################### TRAINING ################################
 nohup python src/train.py \
 	--logtostderr \
