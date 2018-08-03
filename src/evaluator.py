@@ -239,6 +239,7 @@ def evaluate(create_input_dict_fn, create_model_fn, eval_config, categories,
           keep_image_id_for_visualization_export)
     return result_dict, result_losses_dict
 
+
   if graph_hook_fn: graph_hook_fn()
 
   variables_to_restore = tf.global_variables()
