@@ -111,3 +111,22 @@ echo "Tensorboard http://localhost:6006"
 nohup tensorboard --logdir model/ > tensorboard.out &
 
 ```
+
+### Tensorflow Object Detection Directory Modification(Modified Metrics):
+
+Make changes in the following files of the object detection
+
+
+```
+├── object_detection
+│   ├── eval_util.py
+│   ├── model_lib.py
+│   ├── model_main.py
+│   └── utils
+│       ├── metrics.py
+│       ├── object_detection_evaluation.py
+│       └── per_image_evaluation.py
+```
+
+
+The modified method for F1 score and per category stats are written in ```object_detection_evaluation.py & metrics.py``` 
