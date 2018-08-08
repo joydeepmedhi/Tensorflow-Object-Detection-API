@@ -18,7 +18,7 @@ $ source path-to/tensorflow-1.9.0/bin/activate
 and when you install things use ```pip install --ignore-installed or pip install -I ```. e.g. (```pip install -I tensorflow-gpu```), that way pip will install what you've requested locally even though a system-wide version exists. Your python interpreter will look first in the virtualenv's package directory, so those packages should shadow the global ones.
 ___
 
-Follow the below described instructions from tensorflow's object detection library (latest).
+**Follow the below described instructions from tensorflow's object detection library (latest).**
 
   * <a href='https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/installation.md'>Object Detection API Installation</a><br>
 
@@ -73,7 +73,8 @@ You may change the working directory structure as per your requirements.
  * As all the checkpoints will be saved, please ensure to have enough space on the disk.
 
 #### Config File:
-```json
+All the model parameters should be specified here!
+```
 train_input_reader {
   label_map_path: "/home/yoda/Desktop/Joydeep/models/research/cards-detection/data/labelmap.pbtxt"
   tf_record_input_reader {
@@ -99,13 +100,15 @@ eval_input_reader {
 }
 ```
 
-
 #### Training and Validation:
 Source code are in ```src/``` folder.
 
 **nohup** will send the processes to the background.
 
-from working dir:  ```./train_eval_gpu.sh```
+To run, from working dir:
+```
+$ ./train_eval_gpu.sh
+```
 
 ```bash
 #!/bin/sh
@@ -174,7 +177,7 @@ python src/export_inference_graph.py \
 
 The frozen graph with weights will be saved on OUTPUT_DIR.
 
-####Inference
+#### Inference
 
 * Inference can be done on folder by two scripts.
 	* `inference.py`
@@ -194,6 +197,7 @@ python src/inference.py --input_dir=${INPUT_DIR} \
                         --label_map=${LABEL_MAP} \
                         --num_output_classes=${NUM_OUTPUT_CLASSES}
 ``` 
+`od_segmentation.py` can also be used for inference in batches.
 ___
 ### Tensorflow Object Detection Directory Modification (Modified Metrics):
 
@@ -231,3 +235,7 @@ See this for more info [Object Detection Metrics](https://github.com/rafaelpadil
 
 #### Model Zoo
 [CoCo Trained Models](https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/detection_model_zoo.md)
+
+
+##### this Readme will be updated periodically as new features are added!
+Thank you!
