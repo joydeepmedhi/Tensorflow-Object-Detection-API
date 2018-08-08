@@ -24,7 +24,7 @@ Follow the below described instructions from tensorflow's object detection libra
 
 To **build and install** Object Detection API, 
 
-```python
+```bash
 #from models/research/
 $ python setup.py build install
 
@@ -32,7 +32,7 @@ $ python setup.py build install
 $ python setup.py build install
 ```
 
-#### Directory Structure:
+### Directory Structure:
 You may change the working directory structure as per your requirements.
 ```
 .
@@ -66,14 +66,44 @@ You may change the working directory structure as per your requirements.
 
 ```
 
-### Usage
+### Usage:
 
  * For *Simultaneous Validation* (training and validation on the same gpu) we have to set a gpu fraction for the training process.
  * We also have to set summary and checkpoint interval secs. (After how many seconds summary should be save)
  * As all the checkpoints will be saved, please ensure to have enough space on the disk.
 
-#### Training and Validation
+#### Config File:
+```json
+train_input_reader {
+  label_map_path: "/home/yoda/Desktop/Joydeep/models/research/cards-detection/data/labelmap.pbtxt"
+  tf_record_input_reader {
+    input_path: "/home/yoda/Desktop/Joydeep/models/research/cards-detection/data/train.record"
+  }
+}
+
+eval_config {
+  num_examples: 67 #number of examples to be evaluated
+  #wait for 10 seconds before evaluating again (can be increased)
+  eval_interval_secs: 10
+  metrics_set: 'open_images_V2_detection_metrics' #different metrices can be saved
+  use_moving_averages: false
+}
+
+eval_input_reader {
+  label_map_path: "/home/yoda/Desktop/Joydeep/models/research/cards-detection/data/labelmap.pbtxt"
+  shuffle: false
+  num_readers: 1
+  tf_record_input_reader {
+    input_path: "/home/yoda/Desktop/Joydeep/models/research/cards-detection/data/test.record"
+  }
+}
+```
+
+
+#### Training and Validation:
 Source code are in ```src/``` folder.
+
+**nohup** will send the processes to the background.
 
 from working dir:  ```./train_eval_gpu.sh```
 
@@ -111,8 +141,61 @@ echo "Tensorboard http://localhost:6006"
 nohup tensorboard --logdir model/ > tensorboard.out &
 
 ```
+P.S. Be careful in choosing validation data.
 
-### Tensorflow Object Detection Directory Modification(Modified Metrics):
+
+#### Stop Training & validation Process
+```bash
+nvidia-smi
+
+kill -9 pid_1 pid_2
+```
+pid_1 and pid_2 python-tensorflow process ids.
+
+#### Export Inference Model:
+
+Choose the best validation loss/performance checkpoint from training directory.
+
+```bash
+#!/bin/sh
+
+PATH_TO_MODEL_CHECKPOINT="/home/yoda/Desktop/Joydeep/models/research/cards-detection/model/train/model.ckpt-59698"
+PIPELINE_CONFIG_PATH="/home/yoda/Desktop/Joydeep/models/research/cards-detection/data/faster_rcnn_resnet50.config"
+OUTPUT_DIR="/home/yoda/Desktop/Joydeep/models/research/cards-detection/model/inference_model"
+
+
+python src/export_inference_graph.py \
+    --input_type=image_tensor \
+    --pipeline_config_path=${PIPELINE_CONFIG_PATH} \
+    --trained_checkpoint_prefix=${PATH_TO_MODEL_CHECKPOINT} \
+    --output_directory=${OUTPUT_DIR}
+
+```
+
+The frozen graph with weights will be saved on OUTPUT_DIR.
+
+####Inference
+
+* Inference can be done on folder by two scripts.
+	* `inference.py`
+	* `od_segmentation.py`
+
+```bash
+#!/bin/sh
+INPUT_DIR="/home/yoda/Desktop/Joydeep/models/research/cards-detection/test-images"
+OUTPUT_DIR="/home/yoda/Desktop/Joydeep/models/research/cards-detection/test-images/output"
+FROZEN_GRAPH="/home/yoda/Desktop/Joydeep/models/research/cards-detection/model/graph/frozen_inference_graph.pb"
+LABEL_MAP="/home/yoda/Desktop/Joydeep/models/research/cards-detection/data/labelmap.pbtxt"
+NUM_OUTPUT_CLASSES=6
+
+python src/inference.py --input_dir=${INPUT_DIR} \
+                        --output_dir=${OUTPUT_DIR} \
+                        --frozen_graph=${FROZEN_GRAPH} \
+                        --label_map=${LABEL_MAP} \
+                        --num_output_classes=${NUM_OUTPUT_CLASSES}
+``` 
+___
+### Tensorflow Object Detection Directory Modification (Modified Metrics):
 
 Make changes in the following files of the object detection
 
@@ -128,5 +211,23 @@ Make changes in the following files of the object detection
 │       └── per_image_evaluation.py
 ```
 
+* The modified method for F1 score and per category stats are written in ```object_detection_evaluation.py```  &  ```metrics.py```
+* If you wish to add more evaluation metric you can add it in these files.
+* After that again do **build & install** like before to get these new features on tensorboard.
 
-The modified method for F1 score and per category stats are written in ```object_detection_evaluation.py & metrics.py``` 
+___
+### Useful Definitions
+
+#### Corloc (Correct Localization):
+The Corloc is to compute the number of the right boxes you have been detected. The formulation is TP/TP+FP. The rightmost bounding box is neither TP or FP but FN. Thus if there are only 3 detections(TP+FP) with 2 positive(TP). Corloc=2/3=66%
+
+Corloc is only about how many of the boxes your network has detected are actually right at a fixed IOU.
+
+#### mAP
+ It is the average of the maximum precisions at different recall values.
+
+See this for more info [Object Detection Metrics](https://github.com/rafaelpadilla/Object-Detection-Metrics) .
+
+
+#### Model Zoo
+[CoCo Trained Models](https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/detection_model_zoo.md)
