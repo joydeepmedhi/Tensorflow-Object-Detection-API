@@ -5,6 +5,7 @@
 * tensorflow-gpu (1.9.0)
 * CUDA-9.0 and cudnn-7.1
 * virtual environment
+* Object Detection API pull
 
 ### Setup:  
   Create a virtual environment (Not to mess up with your existing tensorflow installations & projects.)
@@ -198,6 +199,10 @@ python src/inference.py --input_dir=${INPUT_DIR} \
                         --num_output_classes=${NUM_OUTPUT_CLASSES}
 ``` 
 `od_segmentation.py` can also be used for inference in batches.
+
+#### Run only evaluation on a trained checkpoint
+Just run the `eval.py` script on specified trained checkpoint. It will evaluate the latest checkpoint.
+
 ___
 ### Tensorflow Object Detection Directory Modification (Modified Metrics):
 
@@ -230,7 +235,7 @@ Corloc is only about how many of the boxes your network has detected are actuall
 #### mAP
  It is the average of the maximum precisions at different recall values.
 
-See this for more info [Object Detection Metrics](https://github.com/rafaelpadilla/Object-Detection-Metrics) .
+See this for more **info** [Object Detection Metrics](https://github.com/rafaelpadilla/Object-Detection-Metrics) .
 
 
 #### Model Zoo
