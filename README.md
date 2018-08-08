@@ -206,10 +206,11 @@ Just run the `eval.py` script on specified trained checkpoint. It will evaluate 
 ___
 ### Tensorflow Object Detection Directory Modification (Modified Metrics):
 
-Make changes in the following files of the object detection
+Make changes in the following files of the object detection folder.
 
 
 ```
+# models/research
 ├── object_detection
 │   ├── eval_util.py
 │   ├── model_lib.py
@@ -222,7 +223,7 @@ Make changes in the following files of the object detection
 
 * The modified method for F1 score and per category stats are written in ```object_detection_evaluation.py```  &  ```metrics.py```
 * If you wish to add more evaluation metric you can add it in these files.
-* After that again do **build & install** like before to get these new features on tensorboard.
+* After that, again do **build & install** like before to get these new features on tensorboard.
 
 ___
 ### Useful Definitions
