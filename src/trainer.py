@@ -216,9 +216,9 @@ def train(create_tensor_dict_fn,
           worker_job_name,
           is_chief,
           train_dir,
-          gpu_fraction,
+          gpu_fraction, #added
+          save_summaries_secs,
           save_interval_secs, #added
-          save_summaries_secs, #added
           graph_hook_fn=None):
   """Training function for detection models.
   Args:

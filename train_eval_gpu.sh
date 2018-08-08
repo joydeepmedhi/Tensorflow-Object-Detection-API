@@ -24,11 +24,13 @@ nvidia-smi
 nohup python src/train.py \
 	--logtostderr \
 	--train_dir=${TRAIN_DIR} \
-	--gpu_fraction=0.7 \
-	--save_summaries_secs=300 \
-	--save_interval_secs=300 \
+	--gpu_fraction=0.65 \
+	--save_summaries_secs=10 \
+	--save_interval_secs=10 \
 	--pipeline_config_path=${PIPELINE_CONFIG_PATH} > trainlog.out &
 
+
+sleep 2m
 
 echo "Evaluation on GPU"
 

@@ -84,9 +84,9 @@ flags.DEFINE_string('input_config_path', '',
                     'Path to an input_reader_pb2.InputReader config file.')
 flags.DEFINE_string('model_config_path', '',
                     'Path to a model_pb2.DetectionModel config file.')
-flags.DEFINE_float('gpu_fraction', 1, 'Fraction of GPU for Training Job.')
+flags.DEFINE_float('gpu_fraction', 0.65, 'Fraction of GPU for Training Job.')
 
-flags.DEFINE_integer('save_summeries_secs', 300,
+flags.DEFINE_integer('save_summaries_secs', 300,
                      'Save summeries to be viewd on tensorboard in seconds!')
 
 flags.DEFINE_integer('save_interval_secs', 300,
